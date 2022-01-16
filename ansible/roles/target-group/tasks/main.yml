@@ -1,0 +1,28 @@
+---
+- name: move terraform files
+  command: mv ../terraform/add-targetgroup/add-tg-asia.tf ../terraform/add-tg-asia.tf
+
+- name: move terraform files
+  command: mv ../terraform/internal-lb-asia.tf  ../terraform/add-targetgroup/internal-lb-asia.tf
+
+- name: move terraform files
+  command: mv ../terraform/add-targetgroup/add-tg-usa.tf ../terraform/add-tg-usa.tf
+
+- name: move terraform files
+  command: mv ../terraform/internal-lb-usa.tf  ../terraform/add-targetgroup/internal-lb-usa.tf
+
+- terraform:
+    project_path: ../terraform/
+    state: present
+
+- name: move terraform files
+  command: mv ../terraform/add-tg-asia.tf ../terraform/add-targetgroup/add-tg-asia.tf
+
+- name: move terraform files
+  command: mv ../terraform/add-targetgroup/internal-lb-asia.tf ../terraform/internal-lb-asia.tf
+
+- name: move terraform files
+  command: mv ../terraform/add-tg-usa.tf ../terraform/add-targetgroup/add-tg-usa.tf
+
+- name: move terraform files
+  command: mv ../terraform/add-targetgroup/internal-lb-usa.tf ../terraform/internal-lb-usa.tf

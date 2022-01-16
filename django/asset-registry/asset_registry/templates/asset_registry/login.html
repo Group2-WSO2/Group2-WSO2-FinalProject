@@ -1,0 +1,11 @@
+{% extends "asset_registry/base_login.html" %} {% load crispy_forms_tags %} {% block content %}
+<div class="container py-5">
+    <h1>Login</h1>
+    <form method="POST">
+        {% csrf_token %} {{ login_form|crispy }}
+        <button class="btn btn-primary" type="submit">Login</button>
+    </form>
+    <p class="text-center">Don't have an account? Ask the Administrator to create one for you. <a href="/admin">Admin login</a>.</p>
+    <!-- <p class="text-center">Don't have an account? <a href="/register">Create an account</a>.</p> -->
+</div>
+{% endblock content %}

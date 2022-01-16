@@ -1,0 +1,64 @@
+[ansible]
+localhost ansible_connection=local
+
+[loadbalancer]
+loadbalancer
+
+[init-master-asia]
+master-1 ansible_host=10.10.0.101
+[init-master-usa]
+master-4 ansible_host=10.12.0.101
+
+[init-masters:children]
+init-master-asia
+init-master-usa
+
+
+[other-masters-asia]
+master-2 ansible_host=10.10.0.102
+master-3 ansible_host=10.10.0.103
+
+[other-masters-usa]
+master-5 ansible_host=10.12.0.102
+master-6 ansible_host=10.12.0.103
+
+
+[masters:children]
+init-master-asia
+init-master-usa
+other-masters-asia
+other-masters-usa
+
+
+[workers-asia]
+worker-1 ansible_host=10.10.0.201
+worker-2 ansible_host=10.10.0.202
+worker-3 ansible_host=10.10.0.203
+
+[workers-usa]
+worker-4 ansible_host=10.12.0.201
+worker-5 ansible_host=10.12.0.202
+worker-6 ansible_host=10.12.0.203
+
+[kube-nodes:children]
+init-master-asia
+init-master-usa
+other-masters-asia
+other-masters-usa
+workers-asia
+workers-usa
+
+[initdb]
+db-1    ansible_host=10.10.0.50
+
+[otherdb]
+db-2    ansible_host=10.10.0.51
+db-3    ansible_host=10.10.0.52
+db-4    ansible_host=10.12.0.50
+db-5    ansible_host=10.12.0.51
+db-6    ansible_host=10.12.0.52
+
+[ns-master]
+ns1     ansible_host=34.88.47.71
+[ns-slave]
+ns2     ansible_host=35.228.71.77

@@ -1,0 +1,22 @@
+{% extends "asset_registry/base.html" %} {% block content %}
+<form class="d-flex" method=POST action="{% url 'search_assets' %}">
+    {% csrf_token %}
+    <input class="form-control me-2" type="search" placeholder="Search assets by the Name or ID" aria-label="Search" Name="searched">
+    <button class="btn btn-secondary" type="submit">Search</button>
+</form>
+<table style="width:100%">
+    <td style="text-align:left;width:40%;font-style:italic;">
+        <h3>Click here to add a new asset :</h3>
+    </td>
+    <td style="width:60%">
+        <a href="{% url 'asset_insert' %}" class="btn btn-success" style="width:100%">
+            <i class="fas fa-plus"></i> Add New
+        </a>
+    </td>
+</table>
+<div style="margin-top:50px">
+    <a href="{% url 'assets_list' %}" class="btn btn-info" style="width:100%">
+        List all assets
+   </a>
+</div>
+{% endblock content %}

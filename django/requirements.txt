@@ -1,0 +1,5 @@
+django-crispy-forms
+django
+xhtml2pdf
+mysqlclient==2.1.0
+django_redis

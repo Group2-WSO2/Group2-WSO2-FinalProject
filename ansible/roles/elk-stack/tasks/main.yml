@@ -1,0 +1,71 @@
+---
+#tasks file for roles/apply-kube-manifests
+- name: Copy elastic-search.yml
+  become: yes
+  copy:
+    src: elastic-search.yml
+    dest: ~/elastic-search.yml
+
+- name: Copy logstash.yml
+  become: yes
+  copy:
+    src: logstash.yml
+    dest: ~/logstash.yml
+
+- name: Copy filebeat-ds.yml
+  become: yes
+  copy:
+    src: filebeat-ds.yml
+    dest: ~/filebeat-ds.yml
+
+- name: Copy kibana.yml
+  become: yes
+  copy:
+    src: kibana.yml
+    dest: ~/kibana.yml
+
+- name: Copy curator.yml
+  become: yes
+  copy:
+    src: curator.yml
+    dest: ~/curator.yml
+
+- name: Copy auth
+  become: yes
+  copy:
+    src: auth
+    dest: ~/auth
+
+- name: create ingress auth secret
+  become: yes
+  shell: |
+    kubectl create secret generic basic-auth-kibana --from-file=/root/auth -n kube-system -o yaml --dry-run=client | kubectl apply -f -
+
+- name: kubectl apply elastic-search.yml
+  become: yes
+  shell: |
+    kubectl apply -f ~/elastic-search.yml
+
+- name: Pause for 60 seconds to build es cluster
+  pause:
+    seconds: 30
+
+- name: kubectl apply logstash.yml
+  become: yes
+  shell: |
+    kubectl apply -f ~/logstash.yml
+
+- name: kubectl apply filebeat-ds.yml
+  become: yes
+  shell: |
+    kubectl apply -f ~/filebeat-ds.yml
+
+- name: kubectl apply kibana
+  become: yes
+  shell: |
+    kubectl apply -f ~/kibana.yml
+
+- name: kubectl apply curator
+  become: yes
+  shell: |
+    kubectl apply -f ~/curator.yml

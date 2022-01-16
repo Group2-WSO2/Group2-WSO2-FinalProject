@@ -1,0 +1,48 @@
+---
+#######################################################
+- name: install and configure dependencies
+  become: yes
+  shell: |
+    apt-get update && sudo apt-get install -y apt-transport-https curl ca-certificates gnupg lsb-release net-tools
+#curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+- name: Install Docker
+  become: yes
+  shell: |
+    curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    echo  "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee  /etc/apt/sources.list.d/docker.list > /dev/null
+    apt-get update
+    apt-get install -y docker-ce docker-ce-cli
+    swapoff -a
+    sed -i '/ swap / s/^/#/' /etc/fstab
+    echo 'Environment="cgroup-driver=systemd/cgroup-driver=cgroups"' | sudo tee -a  /etc/systemd/system/kubelet.service.d/10-kubeadm.conf > /dev/null
+    echo '{"exec-opts": ["native.cgroupdriver=systemd"]}' | sudo tee /etc/docker/daemon.json > /dev/null
+    systemctl daemon-reload
+    systemctl restart docker
+##################################
+#######################################
+- name: disable swap
+  become: yes
+  shell: |
+    swapoff -a
+    sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+
+- name: Create kubernetes repo file
+  become: yes
+  file:
+    path: "/etc/apt/sources.list.d/kubernetes.list"
+    state: "touch"
+
+- name: Add K8s Source
+  become: yes
+  blockinfile:
+    path: "/etc/apt/sources.list.d/kubernetes.list"
+    block: |
+      deb http://packages.cloud.google.com/apt/ kubernetes-xenial main
+      deb https://apt.kubernetes.io/ kubernetes-xenial main
+#########################################
+- name: install kubernetes
+  become: yes
+  shell: |
+    apt-get update
+    apt-get install -y kubelet=1.21.1-00 kubeadm=1.21.1-00 kubectl=1.21.1-00

@@ -1,0 +1,29 @@
+{% extends "asset_registry/base.html" %} {% load crispy_forms_tags %} {% block content %}
+<form action="" method="post" autocomplete="off">
+    {% csrf_token %} {{form.Name|as_crispy_field}} {{form.AssetID|as_crispy_field}} {{form.Owner|as_crispy_field}}
+    <div class="row" style="width:100%">
+        <div class="col-md-5">
+            {{form.Description|as_crispy_field}}
+        </div>
+        <div class="col-md-5">
+            {{form.Location|as_crispy_field}}
+        </div>
+        <div class="col-md-1">
+            {{form.Criticality|as_crispy_field}}
+        </div>
+    </div>
+    <div class="row" style="margin-top:50px">
+        <div class="col-md-8">
+            <button type="submit" class="btn btn-success btn-block btn-lg"><i class="fas fa-database"></i>
+                Submit</button>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'assets_list' %}" class="btn btn-secondary btn-block btn-lg">
+                <i class="fas fa-stream"></i> Back to all
+            </a>
+        </div>
+    </div>
+
+</form>
+
+{% endblock content %}

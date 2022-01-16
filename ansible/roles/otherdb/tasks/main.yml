@@ -1,0 +1,13 @@
+---
+# tasks file for roles/otherdb
+- name: Copy galera.cnf file
+  become: yes
+  template:
+    src: galera.j2
+    dest: /etc/mysql/mariadb.conf.d/galera.cnf
+
+- name: Stop mariaDB
+  become: yes
+  ansible.builtin.systemd:
+    name: mariadb
+    state: stopped

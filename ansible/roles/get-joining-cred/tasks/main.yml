@@ -1,0 +1,73 @@
+---
+# tasks file for roles/get-joining-cred
+- name: initialize the cluster
+  become: yes
+  shell: kubeadm init --control-plane-endpoint "{{ lb }}:6443" --upload-certs --pod-network-cidr=10.1.0.0/16
+  args:
+    chdir: $HOME
+    creates: cluster-initialized.txt
+
+- name: create .kube directory
+  become: yes
+  file:
+    path: $HOME/.kube
+    state: directory
+    mode: 0755
+
+- name: copies admin.conf to user's kube config
+  become: yes
+  copy:
+    remote_src: yes
+    src: /etc/kubernetes/admin.conf
+    dest: /root/.kube/config
+
+- name: Copy weavenet manifest
+  become: yes
+  copy:
+    src: net.yaml
+    dest: ~/net.yaml
+
+- name: install Pod network
+  become: yes
+  shell: kubectl apply -f /root/net.yaml
+  args:
+    chdir: $HOME
+
+#######################################################
+- name: upload certs
+  become: yes
+  shell: kubeadm init phase upload-certs --upload-certs
+  register: certs
+
+- debug:
+    msg: "{{ certs.stdout }}"
+
+- name: Copy certs to local file.
+  become: yes
+  local_action: copy content="{{ certs.stdout_lines[2] }}" dest="/tmp/certs-{{ region }}" mode=0777
+
+# joining master node credentials
+- name: Get the token for joining the master nodes
+  become: yes
+  shell: kubeadm token create  --print-join-command --certificate-key {{ certs.stdout_lines[2] }}
+  register: master_join_command
+
+- debug:
+    msg: "{{ master_join_command.stdout }}"
+
+- name: Copy join command to local file.
+  become: yes
+  local_action: copy content="{{ master_join_command.stdout_lines[0] }}" dest="/tmp/master_join_command-{{ region }}" mode=0777
+
+# joining working nodes credentials
+- name: Get the token for joining the worker nodes
+  become: yes
+  shell: kubeadm token create  --print-join-command
+  register: worker_join_command
+
+- debug:
+    msg: "{{ worker_join_command.stdout }}"
+
+- name: Copy join command to local file.
+  become: yes
+  local_action: copy content="{{ worker_join_command.stdout_lines[0] }}" dest="/tmp/worker_join_command-{{ region }}" mode=0777

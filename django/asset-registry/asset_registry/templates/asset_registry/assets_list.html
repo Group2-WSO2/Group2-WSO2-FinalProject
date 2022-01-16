@@ -1,0 +1,54 @@
+{% extends "asset_registry/base.html" %} {% block content %}
+<form class="d-flex" method=POST action="{% url 'search_assets' %}">
+    {% csrf_token %}
+    <input class="form-control me-2" type="search" placeholder="Search assets by the Name or ID" aria-label="Search" Name="searched">
+    <button class="btn btn-secondary" type="submit">Search</button>
+</form>
+<table class="table table-borderless" style="width:100%">
+    <thead class="border-bottom font-weight-bold">
+        <tr>
+            <td>Name</td>
+            <td>AssetID</td>
+            <td>Owner</td>
+            <td>Description</td>
+            <td>Location</td>
+            <td>Criticality</td>
+            <td>
+                <a href="{% url 'asset_insert' %}" class="btn btn-outline-success">
+                    <i class="fas fa-plus"></i> Add New
+                </a>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for asset in assets_list %}
+        <tr>
+            <td>{{asset.Name}}</td>
+            <td>{{asset.AssetID}}</td>
+            <td>{{asset.Owner}}</td>
+            <td>{{asset.Description}}</td>
+            <td>{{asset.Location}}</td>
+            <td>{{asset.Criticality}}</td>
+            <td>
+                <a href="{% url 'asset_update' asset.AssetID %}" class="btn text-secondary px-0">
+                    <i class="far fa-edit fa-lg"></i>
+                </a>
+                <form action="{% url 'asset_delete' asset.AssetID %}" method="post" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn" onclick="return confirm('Are you sure you want to delete the asset, {{ asset.Name }}?')">
+                            <i class="far fa-trash-alt fa-lg text-danger float-right"></i>
+                        </button>
+                </form>
+                <!-- <form action="{% url 'asset_update' asset.AssetID %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn" onclick="">
+                            <i class='fas fa-edit float-left' style='color:green'></i>
+                        </button>
+                </form> -->
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock content %}

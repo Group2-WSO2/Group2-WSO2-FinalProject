@@ -1,0 +1,13 @@
+---
+# tasks file for roles/joining-workers
+- name: Copy join command from Ansiblehost to the worker nodes.
+  become: yes
+  copy:
+    src: "/tmp/worker_join_command-{{ region }}"
+    dest: /tmp/worker-join-command
+    mode: 0777
+
+- name: Join the Worker nodes to the cluster.
+  become: yes
+  command: sh /tmp/worker-join-command
+  register: joined_or_not

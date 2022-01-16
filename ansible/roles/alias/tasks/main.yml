@@ -1,0 +1,12 @@
+---
+# tasks file for roles/alias
+- name: copy files
+  become: yes
+  copy:
+    src: alias
+    dest: ~/alias
+
+- name: add entries
+  become: yes
+  shell: |
+    cat ~/alias >> ~/.bashrc

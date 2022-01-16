@@ -1,0 +1,23 @@
+---
+# tasks file for roles/apply-webapp
+- name: copy hpa.yml
+  become: yes
+  copy:
+    src: "hpa.yml"
+    dest: ~/hpa.yml
+
+- name: copy webapp.yml
+  become: yes
+  copy:
+    src: "webapp-{{ region }}.yml"
+    dest: ~/webapp.yml
+
+- name: kubectl apply webapp.yml
+  become: yes
+  shell: |
+    kubectl apply -f ~/webapp.yml
+
+- name: kubectl apply hpa.yml
+  become: yes
+  shell: |
+    kubectl apply -f ~/hpa.yml

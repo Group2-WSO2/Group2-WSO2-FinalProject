@@ -1,0 +1,45 @@
+{% extends "asset_registry/base.html" %} {% block content %}
+<style>
+    thead tr td {
+        text-align: center;
+        vertical-align: middle;
+        text-align: center;
+        font-size: 15px;
+        font-style: bold;
+    }
+    
+    td {
+        padding-top: 50%;
+        padding-bottom: 5%;
+        padding-left: 10%;
+        text-align: left;
+        vertical-align: middle;
+        background-color: #96D4D4;
+    }
+</style>
+<table class="table table-borderless" style="border: 1px solid white;border-collapse: collapse; border-spacing:0;">
+    <thead class="border-bottom font-weight-bold">
+        <tr>
+            <td>Name</td>
+            <td>AssetID</td>
+            <td>Owner</td>
+            <td>Description</td>
+            <td>Location</td>
+            <td>Criticality</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for asset in pdf_list %}
+        <tr>
+            <td>{{asset.Name}}</td>
+            <td>{{asset.AssetID}}</td>
+            <td>{{asset.Owner}}</td>
+            <td>{{asset.Description}}</td>
+            <td>{{asset.Location}}</td>
+            <td>{{asset.Criticality}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock content %}

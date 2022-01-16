@@ -1,0 +1,21 @@
+;
+; BIND data file for local loopback interface
+;
+$TTL	604800
+@	IN	SOA	ns1.{{ domain }}. admin.{{ domain }}. (
+			      5		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+;
+@	IN	    NS	    ns1.{{ domain }}.
+@   IN      NS      ns2.{{ domain }}.
+
+ns1.{{ domain }}.          IN      A       {{ master_ip }}
+ns2.{{ domain }}.          IN      A       {{ slave_ip }}
+
+{{ domain }}.        IN      A      {{ usa_ip }}
+www.{{ domain }}.        IN      A     {{ usa_ip }}
+kibana.{{ domain }}.        IN      A     {{ usa_ip }}
+_acme-challenge.{{ domain }}.	 IN		TXT		{{ txt	}}

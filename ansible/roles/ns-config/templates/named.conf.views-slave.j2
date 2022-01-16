@@ -1,0 +1,50 @@
+key "key_usa" {
+    algorithm hmac-md5;
+    secret "{{ key_usa }}";
+};
+
+key "key_asia" {
+    algorithm hmac-md5;
+    secret "{{ key_asia }}";
+};
+
+key "key_default" {
+    algorithm hmac-md5;
+    secret "{{ key_default }}";
+};
+
+acl all_keys { key key_usa; key key_default; key key_asia; };
+
+
+view "usa" {
+  match-clients { key key_usa; !all_keys; AD; AL; AM; AT; AX; AZ; BA; BE; BG; BY; CH; CZ; DE; DK; EE; ES; FI; FO; FR; GB; GG; GI; GR; GS; HR; HU; IE; IM; IS; IT; JE; KZ; LI; LT; LU; LV; MC; MD; ME; MK; MT; NL; NO; PL; PT; RO; RS; SE; SI; SJ; SK; SM; UA; VA; AG; AI; AW; BB; BL; BM; BS; BZ; CA; CR; CU; DM; DO; GD; GL; GP; GT; HN; HT; JM; KN; KY; LC; MF; MQ; MS; MX; NI; PA; PM; PR; SV; SX; TC; TT; UM; US; VC; VG; VI; AR; BO; BQ; BR; BV; CL; CO; CW; EC; FK; GF; GY; PE; PY; SR; UY; VE; };
+  recursion no;
+  server {{ master_ip }} { keys key_usa; };
+  zone "{{ domain }}" {
+    type secondary;
+    masters { {{ master_ip }}; };
+    file "/etc/bind/db.usa";
+  };
+};
+
+view "asia" {
+  match-clients { key key_asia; !all_keys; AO; BF; BI; BJ; BW; CD; CF; CG; CI; CM; CV; DJ; DZ; ER; ET; GA; GH; GM; GN; GQ; GW; KE; KM; LR; LS; LY; MA; MG; ML; MR; MU; MW; MZ; NA; NE; NG; RE; RW; SC; SD; SL; SN; SO; SS; ST; SZ; TD; TG; TN; TZ; UG; YT; ZA; ZM; ZW; AE; AF; BD; BH; BN; BT; CN; CY; EG; GE; HK; ID; IL; IN; IO; IQ; IR; JO; JP; KG; KH; KP; KR; KW; LA; LB; LK; MM; MN; MO; MV; MY; NP; OM; PH; PK; PS; QA; RU; SA; SG; SY; TH; TJ; TL; TM; TR; TW; UZ; VN; YE; AS; AU; CK; FJ; FM; GU; KI; MH; MP; NC; NF; NR; NU; NZ; PF; PG; PN; PW; SB; TK; TO; TV; VU; WF; WS;  };
+  recursion no;
+  server {{ master_ip }} { keys key_asia; };
+  zone "{{ domain }}" {
+    type secondary;
+    masters { {{ master_ip }}; };
+    file "/etc/bind/db.asia";
+  };
+};
+
+view "other" {
+  match-clients { key key_default; !all_keys; any; };
+  recursion no;
+  server {{ master_ip }} { keys key_default; };
+  zone "{{ domain }}" {
+    type secondary;
+    masters { {{ master_ip }}; };
+    file "/etc/bind/db.default";
+  };
+};

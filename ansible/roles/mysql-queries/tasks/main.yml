@@ -1,0 +1,25 @@
+---
+# tasks file for roles/mysql-queries
+- name: Create a new database with name 'bobdata'
+  become: yes
+  mysql_db:
+    name: testDBB
+    state: present
+
+- name: Create user
+  become: yes
+  community.mysql.mysql_query:
+    login_db: testDBB
+    query: CREATE USER 'terraform'@'%' IDENTIFIED BY 'password'
+
+- name: user priviledges
+  become: yes
+  community.mysql.mysql_query:
+    login_db: testDBB
+    query: GRANT ALL PRIVILEGES ON *.* TO 'terraform'@'%'
+
+- name: flush
+  become: yes
+  community.mysql.mysql_query:
+    login_db: testDBB
+    query: FLUSH PRIVILEGES

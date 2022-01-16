@@ -1,0 +1,38 @@
+---
+#tasks file for roles/apply-kube-manifests
+- name: copy redis.yml
+  become: yes
+  copy:
+    src: redis.yml
+    dest: ~/redis.yml
+
+- name: copy ingress-controller
+  become: yes
+  copy:
+    src: ingress-controller.yml
+    dest: ~/ingress-controller.yml
+
+- name: copy metric-server.yml
+  become: yes
+  copy:
+    src: metric-server.yml
+    dest: ~/metric-server.yml
+
+- name: kubectl apply controller
+  become: yes
+  shell: |
+    kubectl apply -f ~/ingress-controller.yml
+
+- name: kubectl apply redis.yml
+  become: yes
+  shell: |
+    kubectl apply -f ~/redis.yml
+
+- name: kubectl apply metric-server.yml
+  become: yes
+  shell: |
+    kubectl apply -f ~/metric-server.yml
+
+- name: Pause for 90 seconds to build app the controller
+  pause:
+    seconds: 40

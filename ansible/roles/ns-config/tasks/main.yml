@@ -1,0 +1,55 @@
+---
+# tasks file for roles/ns-config
+- name: Copy db.asia file
+  become: yes
+  template:
+    src: db.asia.j2
+    dest: /etc/bind/db.asia
+
+- name: Copy db.usa file
+  become: yes
+  template:
+    src: db.usa.j2
+    dest: /etc/bind/db.usa
+
+- name: Copy db.default file
+  become: yes
+  template:
+    src: db.default.j2
+    dest: /etc/bind/db.default
+
+- name: copy GeoIP.acl
+  become: yes
+  copy:
+    src: GeoIP.acl
+    dest: /etc/bind/GeoIP.acl
+
+- name: Copy named.conf file
+  become: yes
+  template:
+    src: named.conf.j2
+    dest: /etc/bind/named.conf
+
+- name: Copy named.conf.options file
+  become: yes
+  copy:
+    src: named.conf.options
+    dest: /etc/bind/named.conf.options
+
+- name: Copy named.conf.views-master file
+  become: yes
+  template:
+    src: named.conf.views-master.j2
+    dest: /etc/bind/named.conf.views-master
+
+- name: Copy named.conf.views-slave file
+  become: yes
+  template:
+    src: named.conf.views-slave.j2
+    dest: /etc/bind/named.conf.views-slave
+
+- name: restart named
+  become: yes
+  systemd:
+    name: named
+    state: restarted

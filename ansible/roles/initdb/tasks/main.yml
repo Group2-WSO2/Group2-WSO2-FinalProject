@@ -1,0 +1,57 @@
+---
+#tasks file for roles/initd
+# - name: Pause for 20 seconds to build app the vm
+#   pause:
+#     seconds: 30
+
+- name: "Install ansible python3 mysql dependency"
+  become: yes
+  apt:
+    name: python3-mysqldb
+    state: latest
+
+- name: Removes anonymous user account for localhost
+  become: yes
+  community.mysql.mysql_user:
+    login_user: root
+    login_password: ""
+    name: ""
+    host: localhost
+    state: absent
+
+- name: Deletes anonymous MySQL server user for ansible-fqdn
+  become: yes
+  community.mysql.mysql_user:
+    login_user: root
+    login_password: ""
+    name: ""
+    host: "{{ ansible_fqdn }}"
+    state: absent
+
+- name: Create a new database with name 'bobdata'
+  become: yes
+  mysql_db:
+    name: test
+    state: absent
+
+- name: Pause for 10 seconds to finish mysql-secure-installation
+  pause:
+    seconds: 10
+
+- name: Sed mariadb.cnf file
+  become: yes
+  shell: |
+    sed -i 's/#character-set-server.*=.*utf8/character-set-server  = utf8/g' /etc/mysql/mariadb.cnf
+    sed -i 's/#character-set-server.*=.*utf8/character-set-server  = utf8/g' /etc/mysql/mariadb.cnf
+
+- name: Copy galera.cnf file
+  become: yes
+  template:
+    src: galera.j2
+    dest: /etc/mysql/mariadb.conf.d/galera.cnf
+
+- name: Stop mariaDB
+  become: yes
+  ansible.builtin.systemd:
+    name: mariadb
+    state: stopped
