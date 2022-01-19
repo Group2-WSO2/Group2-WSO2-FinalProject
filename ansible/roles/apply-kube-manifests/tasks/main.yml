@@ -33,6 +33,6 @@
   shell: |
     kubectl apply -f ~/metric-server.yml
 
-- name: Pause for 90 seconds to build app the controller
+- name: Pause for 40 seconds to build app the controller
   pause:
     seconds: 40

@@ -46,7 +46,7 @@
   shell: |
     kubectl apply -f ~/elastic-search.yml
 
-- name: Pause for 60 seconds to build es cluster
+- name: Pause for 30 seconds to build es cluster
   pause:
     seconds: 30
 

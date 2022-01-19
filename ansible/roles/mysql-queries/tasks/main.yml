@@ -1,6 +1,6 @@
 ---
 # tasks file for roles/mysql-queries
-- name: Create a new database with name 'bobdata'
+- name: Create a new database with name 'testDBB'
   become: yes
   mysql_db:
     name: testDBB
