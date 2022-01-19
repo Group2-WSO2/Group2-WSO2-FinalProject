@@ -1,8 +1,8 @@
 # GCP Settings
 region_asia  = "asia-southeast1"
 region_usa  = "us-central1"
-project_name = "wso2-final"
-auth_key = "../../../key.json"
+project_name = "wso2-final" # This is your GCP project name"
+auth_key = "../group2-sa-key.json"
 app_name = "webapp"
 app_domain = "terraform"
 
