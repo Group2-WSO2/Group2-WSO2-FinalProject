@@ -13,4 +13,4 @@
         query: SHOW GLOBAL STATUS LIKE 'wsrep_local_state_comment'
       register: node_status
     - debug:
-        msg: "{{ node_status.query_result[0].value }}"
+        msg: "{{ node_status.query_result[0] }}"
