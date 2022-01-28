@@ -1,5 +1,11 @@
 ---
 # tasks file for roles/otherdb
+- name: "Install ansible python3 mysql dependency"
+  become: yes
+  apt:
+    name: python3-mysqldb
+    state: latest
+    
 - name: Copy galera.cnf file
   become: yes
   template:
