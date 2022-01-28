@@ -28,7 +28,7 @@
     host: "{{ ansible_fqdn }}"
     state: absent
 
-- name: Create a new database with name 'bobdata'
+- name: Delete the database with name 'test'
   become: yes
   mysql_db:
     name: test
