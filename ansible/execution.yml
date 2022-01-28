@@ -108,6 +108,18 @@
         name: mariadb
         state: started
 
+- name: Db sync status
+  hosts: dbs
+  tasks:
+    - name: Get galera cluster node status
+      become: yes
+      community.mysql.mysql_query:
+        login_db: testDBB
+        query: SHOW GLOBAL STATUS LIKE 'wsrep_local_state_comment'
+      register: node_status
+    - debug:
+        msg: "{{ node_status.query_result[0][0].Value }}"
+
 - name: test sql
   hosts: initdb
   roles:
