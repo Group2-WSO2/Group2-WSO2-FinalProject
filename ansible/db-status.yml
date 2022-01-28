@@ -5,7 +5,7 @@
       become: yes
       apt:
         name: python3-mysqldb
-      state: latest
+        state: latest
     - name: Get galera cluster node status
       become: yes
       community.mysql.mysql_query:
