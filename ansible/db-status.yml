@@ -1,11 +1,11 @@
 - name: Db status
   hosts: dbs
   tasks:
-    - name: "Install ansible python3 mysql dependency"
-      become: yes
-      apt:
-        name: python3-mysqldb
-        state: latest
+#     - name: "Install ansible python3 mysql dependency"
+#       become: yes
+#       apt:
+#         name: python3-mysqldb
+#         state: latest
     - name: Get galera cluster node status
       become: yes
       community.mysql.mysql_query:
@@ -13,4 +13,4 @@
         query: SHOW GLOBAL STATUS LIKE 'wsrep_local_state_comment'
       register: node_status
     - debug:
-        msg: "{{ node_status.query_result.value }}"
+        msg: "{{ node_status.query_result }}"
