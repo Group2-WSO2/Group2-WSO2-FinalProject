@@ -1,112 +1,112 @@
-# - name: implementing terraform
-#   hosts: ansible
-#   tasks:
-#     - name: Terraform
-#       terraform:
-#         project_path: ../terraform/
-#         state: present
+- name: implementing terraform
+  hosts: ansible
+  tasks:
+    - name: Terraform
+      terraform:
+        project_path: ../terraform/
+        state: present
 
-# - name: install kubernetes dependancies
-#   hosts: kube-nodes
-#   roles:
-#     - install-common-dependancies
+- name: install kubernetes dependancies
+  hosts: kube-nodes
+  roles:
+    - install-common-dependancies
 
-# - name: get cred asia
-#   hosts: init-master-asia
-#   vars:
-#     region: asia
-#     lb: "10.10.100.100"
-#   roles:
-#     - get-joining-cred
+- name: get cred asia
+  hosts: init-master-asia
+  vars:
+    region: asia
+    lb: "10.10.100.100"
+  roles:
+    - get-joining-cred
 
-# - name: get cred usa
-#   hosts: init-master-usa
-#   vars:
-#     region: usa
-#     lb: "10.12.100.100"
-#   roles:
-#     - get-joining-cred
+- name: get cred usa
+  hosts: init-master-usa
+  vars:
+    region: usa
+    lb: "10.12.100.100"
+  roles:
+    - get-joining-cred
 
-# - name: join other masters asia
-#   hosts: other-masters-asia
-#   vars:
-#     region: asia
-#   roles:
-#     - joining-masters
+- name: join other masters asia
+  hosts: other-masters-asia
+  vars:
+    region: asia
+  roles:
+    - joining-masters
 
-# - name: join other masters usa
-#   hosts: other-masters-usa
-#   vars:
-#     region: usa
-#   roles:
-#     - joining-masters
+- name: join other masters usa
+  hosts: other-masters-usa
+  vars:
+    region: usa
+  roles:
+    - joining-masters
 
-# - name: join workers asia
-#   hosts: workers-asia
-#   vars:
-#     region: asia
-#   roles:
-#     - joining-workers
+- name: join workers asia
+  hosts: workers-asia
+  vars:
+    region: asia
+  roles:
+    - joining-workers
 
-# - name: join workers usa
-#   hosts: workers-usa
-#   vars:
-#     region: usa
-#   roles:
-#     - joining-workers
+- name: join workers usa
+  hosts: workers-usa
+  vars:
+    region: usa
+  roles:
+    - joining-workers
 
-# - name: add targetgroups
-#   hosts: ansible
-#   roles:
-#     - target-group
+- name: add targetgroups
+  hosts: ansible
+  roles:
+    - target-group
 
-# - name: add aliases
-#   hosts: masters
-#   roles:
-#     - alias
+- name: add aliases
+  hosts: masters
+  roles:
+    - alias
 
-# - name: Configure master nameserver
-#   hosts: ns-master
-#   vars:
-#     type: master
-#   roles:
-#     - ns-config
+- name: Configure master nameserver
+  hosts: ns-master
+  vars:
+    type: master
+  roles:
+    - ns-config
 
-# - name: Configure slave nameserver
-#   hosts: ns-slave
-#   vars:
-#     type: slave
-#   roles:
-#     - ns-config
+- name: Configure slave nameserver
+  hosts: ns-slave
+  vars:
+    type: slave
+  roles:
+    - ns-config
 
-# - name: initdb
-#   hosts: initdb
-#   vars:
-#     mysql_root_password: "root"
-#   roles:
-#     - initdb
+- name: initdb
+  hosts: initdb
+  vars:
+    mysql_root_password: "root"
+  roles:
+    - initdb
 
-# - name: otherdb
-#   hosts: otherdb
-#   roles:
-#     - otherdb
+- name: otherdb
+  hosts: otherdb
+  roles:
+    - otherdb
 
-# - name: initialize DB cluster
-#   hosts: initdb
-#   tasks:
-#     - name: initialize Galera
-#       become: yes
-#       shell: |
-#         galera_new_cluster
+- name: initialize DB cluster
+  hosts: initdb
+  tasks:
+    - name: initialize Galera
+      become: yes
+      shell: |
+        galera_new_cluster
 
-# - name: join other DBs to the cluster
-#   hosts: otherdb
-#   tasks:
-#     - name: Join Galera
-#       become: yes
-#       ansible.builtin.systemd:
-#         name: mariadb
-#         state: started
+- name: join other DBs to the cluster
+  hosts: otherdb
+  tasks:
+    - name: Join Galera
+      become: yes
+      ansible.builtin.systemd:
+        name: mariadb
+        state: started
 
 
 
