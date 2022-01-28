@@ -58,6 +58,10 @@ db-4    ansible_host=10.12.0.50
 db-5    ansible_host=10.12.0.51
 db-6    ansible_host=10.12.0.52
 
+[dbs:children]
+initdb
+otherdb
+
 [ns-master]
 ns1     ansible_host=34.88.47.71
 [ns-slave]
