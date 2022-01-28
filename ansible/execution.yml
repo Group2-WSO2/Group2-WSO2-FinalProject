@@ -108,6 +108,13 @@
         name: mariadb
         state: started
 
+
+
+- name: test sql
+  hosts: initdb
+  roles:
+    - mysql-queries
+    
 - name: Db sync status
   hosts: dbs
   tasks:
@@ -119,11 +126,6 @@
       register: node_status
     - debug:
         msg: "{{ node_status.query_result[0][0].Value }}"
-
-- name: test sql
-  hosts: initdb
-  roles:
-    - mysql-queries
 
 - name: Apply other kube-manifests
   hosts: init-masters
